@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+        monospace;
+}
+
+/* Fix Ant Design Slider handle: chỉ còn 1 vòng tròn trắng, không còn outline xanh khi hover/focus */
+.ant-slider-handle:focus,
+.ant-slider-handle:active,
+.ant-slider-handle:hover {
+    box-shadow: 0 2px 8px #0001 !important;
+    outline: none !important;
+    border-color: #d1d5db !important;
+}
