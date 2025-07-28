@@ -1,18 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-    Users,
-    UserCheck,
-    TrendingUp,
-    BarChart3,
-    PieChart,
-    Activity,
-    Calendar,
-    Settings,
-} from "lucide-react";
+import { Users, UserCheck, TrendingUp, BarChart3 } from "lucide-react";
 import { Select, Card, Statistic, message, Spin } from "antd";
 import {
-    LineChart,
-    Line,
     AreaChart,
     Area,
     BarChart,
@@ -24,7 +13,6 @@ import {
     YAxis,
     CartesianGrid,
     Tooltip,
-    Legend,
     ResponsiveContainer,
 } from "recharts";
 import trafficService from "../../services/trafficService";
@@ -46,87 +34,114 @@ const UserTraffic = () => {
     const [selectedMonths, setSelectedMonths] = useState(6);
     const [loginDays, setLoginDays] = useState(14); // Thay đổi từ dateRange thành loginDays
 
-    // Fetch thống kê tổng quan
-    const fetchTrafficOverview = async () => {
-        try {
-            const response = await trafficService.getTrafficOverview();
-            if (response.data.status_code === 200) {
-                console.log("response.data.data: ", response.data.data);
-                setStatistics(response.data.data);
-            }
-        } catch (error) {
-            console.error("Error fetching traffic overview:", error);
-            message.error("Không thể tải thống kê tổng quan");
-        }
-    };
-
-    // Fetch user mới theo tháng
-    const fetchNewUsersByMonth = async (months = selectedMonths) => {
-        try {
-            const response = await trafficService.getNewUsersByMonth(months);
-            if (response.data.status_code === 200) {
-                setNewUsersByMonth(response.data.data);
-            }
-        } catch (error) {
-            console.error("Error fetching new users by month:", error);
-            message.error("Không thể tải thống kê user mới");
-        }
-    };
-
-    // Fetch phân bố auth provider
-    const fetchAuthProviderDistribution = async () => {
-        try {
-            const response = await trafficService.getAuthProviderDistribution();
-            if (response.data.status_code === 200) {
-                setAuthProviderData(response.data.data);
-            }
-        } catch (error) {
-            console.error("Error fetching auth provider distribution:", error);
-            message.error("Không thể tải phân bố auth provider");
-        }
-    };
-
-    // Fetch logins theo số ngày
-    const fetchLoginsByDays = async (days = loginDays) => {
-        try {
-            const response = await trafficService.getLoginsByPeriod(
-                "day", // luôn theo ngày
-                days
-            );
-            if (response.data.status_code === 200) {
-                setLoginsByDay(response.data.data);
-            }
-        } catch (error) {
-            console.error("Error fetching logins by period:", error);
-            message.error("Không thể tải thống kê đăng nhập");
-        }
-    };
-
-    // Load tất cả dữ liệu khi component mount
-    const loadAllData = async () => {
-        setLoading(true);
-        try {
-            await Promise.all([
-                fetchTrafficOverview(),
-                fetchNewUsersByMonth(),
-                fetchAuthProviderDistribution(),
-                fetchLoginsByDays(),
-            ]);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     // Effects
     useEffect(() => {
+        const fetchTrafficOverview = async () => {
+            try {
+                const response = await trafficService.getTrafficOverview();
+                if (response.data.status_code === 200) {
+                    console.log("response.data.data: ", response.data.data);
+                    setStatistics(response.data.data);
+                }
+            } catch (error) {
+                console.error("Error fetching traffic overview:", error);
+                message.error("Không thể tải thống kê tổng quan");
+            }
+        };
+
+        const fetchNewUsersByMonth = async (months = selectedMonths) => {
+            try {
+                const response = await trafficService.getNewUsersByMonth(
+                    months
+                );
+                if (response.data.status_code === 200) {
+                    setNewUsersByMonth(response.data.data);
+                }
+            } catch (error) {
+                console.error("Error fetching new users by month:", error);
+                message.error("Không thể tải thống kê user mới");
+            }
+        };
+
+        const fetchAuthProviderDistribution = async () => {
+            try {
+                const response =
+                    await trafficService.getAuthProviderDistribution();
+                if (response.data.status_code === 200) {
+                    setAuthProviderData(response.data.data);
+                }
+            } catch (error) {
+                console.error(
+                    "Error fetching auth provider distribution:",
+                    error
+                );
+                message.error("Không thể tải phân bố auth provider");
+            }
+        };
+
+        const fetchLoginsByDays = async (days = loginDays) => {
+            try {
+                const response = await trafficService.getLoginsByPeriod(
+                    "day", // luôn theo ngày
+                    days
+                );
+                if (response.data.status_code === 200) {
+                    setLoginsByDay(response.data.data);
+                }
+            } catch (error) {
+                console.error("Error fetching logins by period:", error);
+                message.error("Không thể tải thống kê đăng nhập");
+            }
+        };
+
+        const loadAllData = async () => {
+            setLoading(true);
+            try {
+                await Promise.all([
+                    fetchTrafficOverview(),
+                    fetchNewUsersByMonth(),
+                    fetchAuthProviderDistribution(),
+                    fetchLoginsByDays(),
+                ]);
+            } finally {
+                setLoading(false);
+            }
+        };
         loadAllData();
-    }, []);
+    }, [selectedMonths, loginDays]);
 
     useEffect(() => {
+        const fetchNewUsersByMonth = async (months = selectedMonths) => {
+            try {
+                const response = await trafficService.getNewUsersByMonth(
+                    months
+                );
+                if (response.data.status_code === 200) {
+                    setNewUsersByMonth(response.data.data);
+                }
+            } catch (error) {
+                console.error("Error fetching new users by month:", error);
+                message.error("Không thể tải thống kê user mới");
+            }
+        };
         fetchNewUsersByMonth(selectedMonths);
     }, [selectedMonths]);
 
     useEffect(() => {
+        const fetchLoginsByDays = async (days = loginDays) => {
+            try {
+                const response = await trafficService.getLoginsByPeriod(
+                    "day", // luôn theo ngày
+                    days
+                );
+                if (response.data.status_code === 200) {
+                    setLoginsByDay(response.data.data);
+                }
+            } catch (error) {
+                console.error("Error fetching logins by period:", error);
+                message.error("Không thể tải thống kê đăng nhập");
+            }
+        };
         fetchLoginsByDays(loginDays);
     }, [loginDays]);
 

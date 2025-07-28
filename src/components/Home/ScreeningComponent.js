@@ -5,7 +5,7 @@ const ScreeningComponent = ({ setActiveTab }) => {
     const [showResult, setShowResult] = useState(false);
 
     // Biến để điều khiển hiển thị số điểm (true = hiển thị, false = ẩn)
-    const [showPoints, setShowPoints] = useState(false);
+    const showPoints = false
 
     const [formData, setFormData] = useState({
         q1: "", // Bạn có từng cho con bú trong thời gian dưới 12 tháng không?
@@ -290,7 +290,7 @@ const ScreeningComponent = ({ setActiveTab }) => {
     };
 
     const handleSubmit = () => {
-        const points = calculateRisk();
+        // const points = calculateRisk();
         setShowResult(true);
     };
 

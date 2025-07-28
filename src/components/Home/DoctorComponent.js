@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getUserInfo } from "../../utils/auth";
 import modelService from "../../services/modelService";
-import { uploadImageToS3, deleteImageFromS3 } from "../../services/s3Service";
+import { uploadImageToS3 } from "../../services/s3Service";
 
 export default function DoctorComponent() {
     const userInfo = getUserInfo();
@@ -13,9 +13,6 @@ export default function DoctorComponent() {
     const [dragActive, setDragActive] = useState(false);
     const [modelInfo, setModelInfo] = useState(null);
     const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
-    const [uploadedImageKey, setUploadedImageKey] = useState(null);
-    const [uploadedImageOriginalName, setUploadedImageOriginalName] =
-        useState(null);
     const [modelAvailable, setModelAvailable] = useState(true);
     // Load model info và kiểm tra availability khi component mount
     useEffect(() => {
@@ -149,8 +146,6 @@ export default function DoctorComponent() {
             // Reset prediction và upload state khi chọn ảnh mới
             setPrediction(null);
             setUploadedImageUrl(null);
-            setUploadedImageKey(null);
-            setUploadedImageOriginalName(null);
         }
     };
 
@@ -176,8 +171,6 @@ export default function DoctorComponent() {
             console.log("📤 Bắt đầu upload ảnh lên S3...");
             const uploadResult = await uploadImageToServer(selectedImage);
             setUploadedImageUrl(uploadResult.url);
-            setUploadedImageKey(uploadResult.key);
-            setUploadedImageOriginalName(uploadResult.originalName);
             console.log("✅ Upload S3 thành công:", uploadResult);
 
             console.log("truoc khi gủi api predit:\n", {
@@ -255,8 +248,7 @@ export default function DoctorComponent() {
         setImagePreview(null);
         setPrediction(null);
         setUploadedImageUrl(null);
-        setUploadedImageKey(null);
-        setUploadedImageOriginalName(null);
+
 
         // Reset input file để có thể chọn lại cùng một file
         const fileInput = document.querySelector('input[type="file"]');

@@ -90,7 +90,6 @@ const PredictManagement = () => {
     const [selectedDays, setSelectedDays] = useState(7);
 
     // State cho upload file
-    const [uploading, setUploading] = useState(false);
     const [uploadedFile, setUploadedFile] = useState(null);
     const [uploadedFileUrl, setUploadedFileUrl] = useState("");
 
@@ -118,95 +117,90 @@ const PredictManagement = () => {
         }
     };
 
-    // Fetch thống kê
-    const fetchStats = async () => {
-        setStatsLoading(true);
-        try {
-            const [classResponse, dailyResponse, confidenceResponse] =
-                await Promise.all([
-                    predictionService.getPredictions({ limit: 10000 }), // Lấy tất cả predictions
-                    predictionService.getPredictionDailyStats(selectedDays),
-                    predictionService.getAdminAverageConfidence(), // Lấy xác suất trung bình
-                ]);
-
-            // Fix lỗi response format và debug
-            console.log("Class response:", classResponse);
-            console.log("Daily response:", dailyResponse);
-            console.log("Confidence response:", confidenceResponse);
-
-            // Xử lý class stats giống MammoManagement.js
-            if (classResponse.data.success) {
-                const predictions = classResponse.data.data; // Lấy data array, không phải total
-                const classStats = {
-                    class_stats: {},
-                    total_images: classResponse.data.total,
-                };
-
-                // Đếm số lượng từng class giống MammoManagement.js
-                predictions.forEach((item) => {
-                    if (item.prediction_result) {
-                        const result = item.prediction_result;
-                        classStats.class_stats[result] =
-                            (classStats.class_stats[result] || 0) + 1;
-                    }
-                });
-
-                setClassStats(classStats);
-            }
-
-            // Xử lý daily stats từ backend
-            if (dailyResponse.data && dailyResponse.data.success) {
-                setDailyStats(dailyResponse.data.data);
-            } else if (dailyResponse.data && dailyResponse.data.data) {
-                setDailyStats(dailyResponse.data.data);
-            } else if (dailyResponse.data) {
-                setDailyStats(dailyResponse.data);
-            }
-
-            // Xử lý average confidence
-            if (confidenceResponse.data && confidenceResponse.data.success) {
-                setAverageConfidence(
-                    confidenceResponse.data.data.average_confidence || 0
-                );
-            } else if (confidenceResponse.data) {
-                setAverageConfidence(
-                    confidenceResponse.data.data.average_confidence || 0
-                );
-            }
-
-            console.log("Final classStats:", classStats);
-            console.log("Final dailyStats:", dailyStats);
-            console.log("Final averageConfidence:", averageConfidence);
-            console.log(
-                "Daily stats format:",
-                dailyStats && dailyStats.length > 0 ? dailyStats[0] : "No data"
-            );
-        } catch (error) {
-            console.error("Lỗi fetch stats:", error);
-            message.error(
-                "Không thể tải thống kê: " +
-                    (error.response?.data?.detail || error.message)
-            );
-        } finally {
-            setStatsLoading(false);
-        }
-    };
-
     useEffect(() => {
         fetchModels(currentPage);
     }, [currentPage]);
 
     useEffect(() => {
+        const fetchStats = async () => {
+            setStatsLoading(true);
+            try {
+                const [classResponse, dailyResponse, confidenceResponse] =
+                    await Promise.all([
+                        predictionService.getPredictions({ limit: 10000 }), // Lấy tất cả predictions
+                        predictionService.getPredictionDailyStats(selectedDays),
+                        predictionService.getAdminAverageConfidence(), // Lấy xác suất trung bình
+                    ]);
+
+                // Fix lỗi response format và debug
+                console.log("Class response:", classResponse);
+                console.log("Daily response:", dailyResponse);
+                console.log("Confidence response:", confidenceResponse);
+
+                // Xử lý class stats giống MammoManagement.js
+                if (classResponse.data.success) {
+                    const predictions = classResponse.data.data; // Lấy data array, không phải total
+                    const classStats = {
+                        class_stats: {},
+                        total_images: classResponse.data.total,
+                    };
+
+                    // Đếm số lượng từng class giống MammoManagement.js
+                    predictions.forEach((item) => {
+                        if (item.prediction_result) {
+                            const result = item.prediction_result;
+                            classStats.class_stats[result] =
+                                (classStats.class_stats[result] || 0) + 1;
+                        }
+                    });
+
+                    setClassStats(classStats);
+                }
+
+                // Xử lý daily stats từ backend
+                if (dailyResponse.data && dailyResponse.data.success) {
+                    setDailyStats(dailyResponse.data.data);
+                } else if (dailyResponse.data && dailyResponse.data.data) {
+                    setDailyStats(dailyResponse.data.data);
+                } else if (dailyResponse.data) {
+                    setDailyStats(dailyResponse.data);
+                }
+
+                // Xử lý average confidence
+                if (
+                    confidenceResponse.data &&
+                    confidenceResponse.data.success
+                ) {
+                    setAverageConfidence(
+                        confidenceResponse.data.data.average_confidence || 0
+                    );
+                } else if (confidenceResponse.data) {
+                    setAverageConfidence(
+                        confidenceResponse.data.data.average_confidence || 0
+                    );
+                }
+
+                console.log("Final classStats:", classStats);
+                console.log("Final dailyStats:", dailyStats);
+                console.log("Final averageConfidence:", averageConfidence);
+                console.log(
+                    "Daily stats format:",
+                    dailyStats && dailyStats.length > 0
+                        ? dailyStats[0]
+                        : "No data"
+                );
+            } catch (error) {
+                console.error("Lỗi fetch stats:", error);
+                message.error(
+                    "Không thể tải thống kê: " +
+                        (error.response?.data?.detail || error.message)
+                );
+            } finally {
+                setStatsLoading(false);
+            }
+        };
         fetchStats();
-    }, [selectedDays]);
-
-    useEffect(() => {
-        console.log("classStats changed:", classStats);
-    }, [classStats]);
-
-    useEffect(() => {
-        console.log("dailyStats changed:", dailyStats);
-    }, [dailyStats]);
+    }, [selectedDays, averageConfidence, classStats, dailyStats]);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -1170,13 +1164,10 @@ const PredictManagement = () => {
                             </Button>
                             <Button
                                 type="primary"
-                                loading={uploading}
                                 className="!bg-gradient-to-r !from-purple-500 !to-indigo-500 !border-0"
                                 onClick={handleConfirmUpload}
                             >
-                                {uploading
-                                    ? "Đang tải lên..."
-                                    : "Tải lên S3 & Tạo Model"}
+                                Tải lên S3 & Tạo Model
                             </Button>
                         </div>
                     </Form.Item>

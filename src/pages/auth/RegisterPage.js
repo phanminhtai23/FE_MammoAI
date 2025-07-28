@@ -48,7 +48,6 @@ const RegisterPage = () => {
             } catch (error) {
                 console.log("error:", error);
                 // Xử lý các loại lỗi và hiển thị popup
-                let msg = "Đăng ký thất bại";
                 // sai tài khoản hoặc mật khẩu
                 if (!error.response && error.message) {
                     // lỗi kết nối
@@ -102,16 +101,13 @@ const RegisterPage = () => {
         try {
             setLoading(true);
             // Gọi API đăng ký sử dụng userService
-            const response = await userService.register({
+            await userService.register({
                 name: values.name,
                 email: values.email,
                 password: values.password,
             });
 
-            console.log("response:", values.email);
-
             // Chỉ khi register thành công mới gửi verification code
-            console.log("Sending verification code to:", values.email);
             await userService.sendVerificationCode({ email: values.email });
 
             message.success("Đăng ký thành công!");

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Input, Select, Pagination, Spin, message } from "antd";
 import dayjs from "dayjs";
 import predictionService from "../../services/predictionService";
-import { Edit, Trash2, Eye, Settings, Download } from "lucide-react";
+import {Trash2, Eye, Settings, Download } from "lucide-react";
 import { Slider } from "antd";
 import axiosClient from "../../services/axiosClient";
 import {

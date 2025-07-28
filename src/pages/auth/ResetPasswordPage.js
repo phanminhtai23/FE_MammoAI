@@ -34,47 +34,47 @@ const ResetPasswordPage = () => {
             return;
         }
 
+        // Kiểm tra token có hợp lệ không
+        const checkTokenValidity = async () => {
+            try {
+                setLoading(true);
+
+                // Gọi API kiểm tra token
+                const response = await userService.verifyResetToken({
+                    token: resetToken,
+                });
+                console.log("response:", response);
+                if (response.status === 200 && response.data.payload) {
+                    setTokenValid(true);
+                    setUserEmail(response.data.payload.sub);
+                    // message.success("Token hợp lệ! Vui lòng nhập mật khẩu mới.");
+                }
+            } catch (error) {
+                console.log("error:", error);
+                console.error("Token verification error:", error);
+
+                const errorMsg = error.response?.data?.detail || error.message;
+
+                if (errorMsg && errorMsg.includes("expired")) {
+                    setErrorMessage(
+                        "Link đặt lại mật khẩu đã hết hạn! Vui lòng yêu cầu link mới."
+                    );
+                } else if (errorMsg && errorMsg.includes("invalid")) {
+                    setErrorMessage("Link đặt lại mật khẩu không hợp lệ!");
+                } else {
+                    setErrorMessage(
+                        "Có lỗi xảy ra khi xác thực link! Vui lòng thử lại."
+                    );
+                }
+
+                setTokenValid(false);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         checkTokenValidity();
     }, [resetToken]);
-
-    // Kiểm tra token có hợp lệ không
-    const checkTokenValidity = async () => {
-        try {
-            setLoading(true);
-
-            // Gọi API kiểm tra token
-            const response = await userService.verifyResetToken({
-                token: resetToken,
-            });
-            console.log("response:", response);
-            if (response.status === 200 && response.data.payload) {
-                setTokenValid(true);
-                setUserEmail(response.data.payload.sub);
-                // message.success("Token hợp lệ! Vui lòng nhập mật khẩu mới.");
-            }
-        } catch (error) {
-            console.log("error:", error);
-            console.error("Token verification error:", error);
-
-            const errorMsg = error.response?.data?.detail || error.message;
-
-            if (errorMsg && errorMsg.includes("expired")) {
-                setErrorMessage(
-                    "Link đặt lại mật khẩu đã hết hạn! Vui lòng yêu cầu link mới."
-                );
-            } else if (errorMsg && errorMsg.includes("invalid")) {
-                setErrorMessage("Link đặt lại mật khẩu không hợp lệ!");
-            } else {
-                setErrorMessage(
-                    "Có lỗi xảy ra khi xác thực link! Vui lòng thử lại."
-                );
-            }
-
-            setTokenValid(false);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     // Xử lý đặt lại mật khẩu
     const handleResetPassword = async (values) => {

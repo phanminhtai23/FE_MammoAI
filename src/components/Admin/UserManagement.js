@@ -4,7 +4,6 @@ import {
     Trash2,
     Eye,
     Search as SearchIcon,
-    Users,
     Settings,
 } from "lucide-react";
 import {
@@ -75,6 +74,40 @@ const UserManagement = ({ darkMode = false }) => {
 
     // Effect để fetch users khi component mount hoặc params thay đổi
     useEffect(() => {
+        const fetchUsers = async () => {
+            setLoading(true);
+            try {
+                const params = {
+                    page: currentPage,
+                    page_size: PAGE_SIZE,
+                    ...(search && { search }),
+                    ...(filters.role && { role: filters.role }),
+                    ...(filters.auth_provider && {
+                        auth_provider: filters.auth_provider,
+                    }),
+                    ...(filters.is_revoked !== null && {
+                        is_revoked: filters.is_revoked,
+                    }),
+                };
+
+                const response = await userService.getUsersAdmin(params);
+
+                if (response.data.status_code === 200) {
+                    setUsers(response.data.data.users);
+                    setTotalUsers(response.data.data.pagination.total_users);
+                } else {
+                    message.error("Lỗi khi tải danh sách user");
+                }
+            } catch (error) {
+                console.error("Error fetching users:", error);
+                message.error(
+                    "Không thể tải danh sách user: " +
+                        (error.response?.data?.detail || error.message)
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchUsers();
     }, [currentPage, search, filters]);
 
@@ -82,10 +115,46 @@ const UserManagement = ({ darkMode = false }) => {
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             setCurrentPage(1); // Reset về trang 1 khi search
+            const fetchUsers = async () => {
+                setLoading(true);
+                try {
+                    const params = {
+                        page: 1,
+                        page_size: PAGE_SIZE,
+                        ...(search && { search }),
+                        ...(filters.role && { role: filters.role }),
+                        ...(filters.auth_provider && {
+                            auth_provider: filters.auth_provider,
+                        }),
+                        ...(filters.is_revoked !== null && {
+                            is_revoked: filters.is_revoked,
+                        }),
+                    };
+
+                    const response = await userService.getUsersAdmin(params);
+
+                    if (response.data.status_code === 200) {
+                        setUsers(response.data.data.users);
+                        setTotalUsers(
+                            response.data.data.pagination.total_users
+                        );
+                    } else {
+                        message.error("Lỗi khi tải danh sách user");
+                    }
+                } catch (error) {
+                    console.error("Error fetching users:", error);
+                    message.error(
+                        "Không thể tải danh sách user: " +
+                            (error.response?.data?.detail || error.message)
+                    );
+                } finally {
+                    setLoading(false);
+                }
+            };
             fetchUsers();
         }, 500);
         return () => clearTimeout(timeoutId);
-    }, [search]);
+    }, [search, filters]);
 
     const handleSearch = (e) => {
         setSearch(e.target.value);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Button, message } from "antd";
+import { Form, Button, message } from "antd";
 import { MailOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import userService from "../../services/userService";

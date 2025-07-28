@@ -1,6 +1,5 @@
 // api/axiosClient.js
 import axios from "axios";
-import { message } from "antd";
 
 const axiosClient = axios.create({
     baseURL: process.env.REACT_APP_BASE_BACKEND_URL, // Thay đổi URL API của bạn

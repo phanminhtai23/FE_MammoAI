@@ -18,7 +18,6 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [errorVisible, setErrorVisible] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
 
     // Auto redirect nếu đã đăng nhập
     useEffect(() => {
@@ -56,7 +55,6 @@ const LoginPage = () => {
             } catch (error) {
                 console.log("error:", error);
                 // Xử lý các loại lỗi và hiển thị popup
-                let msg = "Đăng nhập thất bại";
                 // sai tài khoản hoặc mật khẩu
                 if (!error.response && error.message) {
                     // lỗi kết nối
@@ -135,7 +133,6 @@ const LoginPage = () => {
                 navigate("/home");
             }
         } catch (error) {
-            let msg = "Đăng nhập thất bại";
             if (
                 error.response?.status === 403 &&
                 error.response.data.detail === "Tài khoản chưa xác thực"
@@ -192,7 +189,11 @@ const LoginPage = () => {
                 ]}
                 centered
             >
-                <Alert message={errorMessage} type="error" showIcon />
+                <Alert
+                    message="Có lỗi xảy ra, vui lòng thử lại!"
+                    type="error"
+                    showIcon
+                />
             </Modal>
 
             <div className="bg-white shadow-2xl rounded-2xl overflow-hidden w-full max-w-md">

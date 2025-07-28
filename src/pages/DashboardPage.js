@@ -11,8 +11,6 @@ import {
     Menu,
     ChevronLeft,
     LogOut,
-    Moon,
-    Sun,
 } from "lucide-react";
 import { message } from "antd";
 import userService from "../services/userService";
@@ -49,7 +47,7 @@ const AdminDashboard = ({ avatarUrl, userName }) => {
         if (token) {
             try {
                 // Gọi API logout để cập nhật user session
-                const response = await userService.logout();
+                await userService.logout();
 
                 // Xóa token khỏi localStorage
                 localStorage.removeItem("token");
