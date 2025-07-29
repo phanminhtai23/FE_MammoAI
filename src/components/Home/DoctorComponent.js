@@ -5,7 +5,7 @@ import { uploadImageToS3 } from "../../services/s3Service";
 
 export default function DoctorComponent() {
     const userInfo = getUserInfo();
-    console.log("userInfo: ", userInfo);
+    // console.log("userInfo: ", userInfo);
     const [selectedImage, setSelectedImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +32,7 @@ export default function DoctorComponent() {
             try {
                 const response = await modelService.modelIsAvailable();
                 setModelAvailable(response.data.available);
-                console.log("Model availability:", response.data);
+                // console.log("Model availability:", response.data);
             } catch (error) {
                 console.error("Error checking model availability:", error);
                 setModelAvailable(false);
@@ -112,15 +112,15 @@ export default function DoctorComponent() {
     // Upload ảnh lên S3 và trả về URL + key
     const uploadImageToServer = async (file) => {
         try {
-            console.log("📤 Bắt đầu upload file:", file.name);
+            // console.log("📤 Bắt đầu upload file:", file.name);
 
             // Upload trực tiếp lên S3 với progress tracking
             const result = await uploadImageToS3(file, (progress) => {
-                console.log(`📊 Upload progress: ${progress}%`);
+                // console.log(`📊 Upload progress: ${progress}%`);
                 // Anh có thể thêm progress bar ở đây
             });
 
-            console.log("✅ Upload thành công:", result);
+            // console.log("✅ Upload thành công:", result);
             return {
                 url: result.url,
                 key: result.key,
@@ -168,18 +168,18 @@ export default function DoctorComponent() {
             const startTime = Date.now();
 
             // Upload ảnh lên S3 trước khi predict
-            console.log("📤 Bắt đầu upload ảnh lên S3...");
+            // console.log("📤 Bắt đầu upload ảnh lên S3...");
             const uploadResult = await uploadImageToServer(selectedImage);
             setUploadedImageUrl(uploadResult.url);
-            console.log("✅ Upload S3 thành công:", uploadResult);
+            // console.log("✅ Upload S3 thành công:", uploadResult);
 
-            console.log("truoc khi gủi api predit:\n", {
-                doctor_id: userInfo.user_id,
-                image_url: uploadResult.url,
-                image_original_name: uploadResult.originalName,
-                image_key: uploadResult.key,
-                model_name: modelInfo.name,
-            });
+            // console.log("truoc khi gủi api predit:\n", {
+            //     doctor_id: userInfo.user_id,
+            //     image_url: uploadResult.url,
+            //     image_original_name: uploadResult.originalName,
+            //     image_key: uploadResult.key,
+            //     model_name: modelInfo.name,
+            // });
             // Gọi API predict
             const response = await modelService.predict({
                 doctor_id: userInfo.user_id,

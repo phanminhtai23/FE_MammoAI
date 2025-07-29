@@ -55,7 +55,7 @@ const AdminDashboard = ({ avatarUrl, userName }) => {
                 message.success("Đăng xuất thành công!");
                 navigate("/login");
             } catch (error) {
-                console.log("Logout error:", error);
+                // console.log("Logout error:", error);
 
                 // Vẫn xóa token ngay cả khi API lỗi
                 localStorage.removeItem("token");

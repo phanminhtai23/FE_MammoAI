@@ -34,7 +34,7 @@ const ForgotPasswordPage = () => {
             }
         } catch (error) {
             // Handle các lỗi từ server
-            console.log(error);
+            // console.log(error);
             const errorMessage = error.response?.data?.detail || error.message;
 
             if (errorMessage) {

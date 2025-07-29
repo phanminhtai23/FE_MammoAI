@@ -102,6 +102,10 @@ const PredictManagement = () => {
                 limit: PAGE_SIZE,
             };
 
+            console.log(
+                "REACT_APP_BASE_BACKEND_URL",
+                process.env.REACT_APP_BASE_BACKEND_URL
+            );
             const response = await modelService.getModelsAdmin(params);
             if (response.data) {
                 setModels(response.data);
@@ -133,9 +137,9 @@ const PredictManagement = () => {
                     ]);
 
                 // Fix lỗi response format và debug
-                console.log("Class response:", classResponse);
-                console.log("Daily response:", dailyResponse);
-                console.log("Confidence response:", confidenceResponse);
+                // console.log("Class response:", classResponse);
+                // console.log("Daily response:", dailyResponse);
+                // console.log("Confidence response:", confidenceResponse);
 
                 // Xử lý class stats giống MammoManagement.js
                 if (classResponse.data.success) {
@@ -180,15 +184,15 @@ const PredictManagement = () => {
                     );
                 }
 
-                console.log("Final classStats:", classStats);
-                console.log("Final dailyStats:", dailyStats);
-                console.log("Final averageConfidence:", averageConfidence);
-                console.log(
-                    "Daily stats format:",
-                    dailyStats && dailyStats.length > 0
-                        ? dailyStats[0]
-                        : "No data"
-                );
+                // console.log("Final classStats:", classStats);
+                // console.log("Final dailyStats:", dailyStats);
+                // console.log("Final averageConfidence:", averageConfidence);
+                // console.log(
+                //     "Daily stats format:",
+                //     dailyStats && dailyStats.length > 0
+                //         ? dailyStats[0]
+                //         : "No data"
+                // );
             } catch (error) {
                 console.error("Lỗi fetch stats:", error);
                 message.error(
@@ -200,7 +204,7 @@ const PredictManagement = () => {
             }
         };
         fetchStats();
-    }, [selectedDays, averageConfidence, classStats, dailyStats]);
+    }, [selectedDays]); // Chỉ phụ thuộc vào selectedDays
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -436,8 +440,8 @@ const PredictManagement = () => {
         vietnamToday.setHours(vietnamToday.getHours() + 7);
         const todayDateStr = vietnamToday.toISOString().split("T")[0]; // Format: YYYY-MM-DD
 
-        console.log("🔍 Vietnam today:", todayDateStr);
-        console.log("🔍 Daily stats:", dailyStats);
+        // console.log("🔍 Vietnam today:", todayDateStr);
+        // console.log("🔍 Daily stats:", dailyStats);
 
         // Tìm dữ liệu cho ngày hôm nay (ngày cuối cùng trong 7 ngày gần nhất)
         const today = dailyStats[dailyStats.length - 1]?.count || 0;
@@ -448,13 +452,13 @@ const PredictManagement = () => {
         const change = today - yesterday;
         const percent = yesterday > 0 ? (change / yesterday) * 100 : 0;
 
-        console.log("🔍 Today count (last day):", today);
-        console.log("🔍 Yesterday count (second last day):", yesterday);
-        console.log("🔍 Change:", change);
-        console.log(
-            "🔍 7 days range:",
-            dailyStats.map((item) => item.date)
-        );
+        // console.log("🔍 Today count (last day):", today);
+        // console.log("🔍 Yesterday count (second last day):", yesterday);
+        // console.log("🔍 Change:", change);
+        // console.log(
+        //     "🔍 7 days range:",
+        //     dailyStats.map((item) => item.date)
+        // );
 
         return { count: today, change, percent };
     };

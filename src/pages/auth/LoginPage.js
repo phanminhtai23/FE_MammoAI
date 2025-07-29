@@ -43,7 +43,7 @@ const LoginPage = () => {
                 const response = await userService.googleLogin({
                     token: tokenResponse.access_token,
                 });
-                console.log("response:", response);
+                // console.log("response:", response);
                 localStorage.setItem("token", response.data.access_token);
                 // Trigger storage event để cập nhật navigation
                 window.dispatchEvent(new Event("storage"));
@@ -53,7 +53,7 @@ const LoginPage = () => {
                     navigate("/home");
                 }
             } catch (error) {
-                console.log("error:", error);
+                // console.log("error:", error);
                 // Xử lý các loại lỗi và hiển thị popup
                 // sai tài khoản hoặc mật khẩu
                 if (!error.response && error.message) {

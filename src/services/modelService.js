@@ -14,8 +14,30 @@ const modelService = {
     // Lấy danh sách models với filter và pagination (Admin only)
     getModelsAdmin: (params = {}) => {
         const queryString = new URLSearchParams(params).toString();
-        return axiosClient.get(`/model${queryString ? `?${queryString}` : ""}`);
+        const url = `model${queryString ? `?${queryString}` : ""}`;
+        console.log("url", url);
+
+        const token = localStorage.getItem("token");
+        // Hardcode HTTPS
+        const fullURL = `https://api.meowchat.id.vn/${url}`;
+        console.log("fullURL", fullURL);
+
+        return fetch(fullURL, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        }).then((response) => response.json());
     },
+
+    // // Lấy danh sách models với filter và pagination (Admin only)
+    // getModelsAdmin: (params = {}) => {
+    //     const queryString = new URLSearchParams(params).toString();
+    //     const url = `/model${queryString ? `?${queryString}` : ""}`;
+    //     console.log("url", url);
+    //     return axiosClient.get("/model");
+    // },
 
     // Lấy chi tiết model (Admin only)
     getModelDetailAdmin: (modelId) => {
@@ -50,7 +72,6 @@ const modelService = {
     modelIsAvailable: () => {
         return axiosClient.get("/model/model-is-availabe");
     },
-
 };
 
 export default modelService;

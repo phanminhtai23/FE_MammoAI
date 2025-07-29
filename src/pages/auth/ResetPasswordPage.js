@@ -43,14 +43,14 @@ const ResetPasswordPage = () => {
                 const response = await userService.verifyResetToken({
                     token: resetToken,
                 });
-                console.log("response:", response);
+                // console.log("response:", response);
                 if (response.status === 200 && response.data.payload) {
                     setTokenValid(true);
                     setUserEmail(response.data.payload.sub);
                     // message.success("Token hợp lệ! Vui lòng nhập mật khẩu mới.");
                 }
             } catch (error) {
-                console.log("error:", error);
+                // console.log("error:", error);
                 console.error("Token verification error:", error);
 
                 const errorMsg = error.response?.data?.detail || error.message;

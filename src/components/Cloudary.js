@@ -29,7 +29,7 @@ const UploadWidget = ({ sendExtractData, modeData }) => {
                 senDrugData(respone.DDIs);
             // Trích tương tác thuốc
             } else if (modeData === "ddi")  {
-                console.log("vo extract ddi");
+                // console.log("vo extract ddi");
                 let respone = await ddiService.extract(urls);
                 senDDIsData(respone.DDIs);
             }

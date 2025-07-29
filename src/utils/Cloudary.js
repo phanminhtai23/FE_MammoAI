@@ -21,7 +21,7 @@ const UploadImage = () => {
             );
             const data = await response.json();
             setImageUrl(data.secure_url);
-            console.log("Uploaded Image URL:", data.secure_url);
+            // console.log("Uploaded Image URL:", data.secure_url);
         } catch (error) {
             console.error("Upload failed", error);
         }

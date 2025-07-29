@@ -3,7 +3,6 @@
 **/__pycache__
 /backend/venv
 
-**/*.config.js
 
 **/*.pem
 

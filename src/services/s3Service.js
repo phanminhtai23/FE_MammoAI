@@ -60,7 +60,7 @@ export const uploadImageToS3 = async (file, onProgress = null) => {
             },
         };
 
-        console.log("🚀 Bắt đầu upload lên S3:", fileName);
+        // console.log("🚀 Bắt đầu upload lên S3:", fileName);
 
         // Upload với progress tracking
         const upload = s3.upload(uploadParams);
@@ -78,7 +78,7 @@ export const uploadImageToS3 = async (file, onProgress = null) => {
         // Thực hiện upload
         const result = await upload.promise();
 
-        console.log("✅ Upload S3 thành công:", result.Location);
+        // console.log("✅ Upload S3 thành công:", result.Location);
 
         return {
             success: true,
@@ -106,10 +106,10 @@ export const deleteImageFromS3 = async (fileKey) => {
         };
 
         await s3.deleteObject(deleteParams).promise();
-        console.log("✅ Đã xóa file S3:", fileKey);
+        // console.log("✅ Đã xóa file S3:", fileKey);
         return true;
     } catch (error) {
-        console.error("❌ Lỗi xóa file S3:", error);
+        // console.error("❌ Lỗi xóa file S3:", error);
         return false;
     }
 };
@@ -178,7 +178,7 @@ export const uploadModelToS3 = async (file, onProgress = null) => {
             },
         };
 
-        console.log("🚀 Bắt đầu upload model lên S3:", fileName);
+        // console.log("🚀 Bắt đầu upload model lên S3:", fileName);
 
         // Upload với progress tracking
         const upload = s3.upload(uploadParams);
@@ -196,7 +196,7 @@ export const uploadModelToS3 = async (file, onProgress = null) => {
         // Thực hiện upload
         const result = await upload.promise();
 
-        console.log("✅ Upload model S3 thành công:", result.Location);
+        // console.log("✅ Upload model S3 thành công:", result.Location);
 
         return {
             success: true,

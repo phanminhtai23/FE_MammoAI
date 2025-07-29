@@ -42,11 +42,11 @@ const RegisterPage = () => {
                 const response = await userService.googleRegister({
                     token: tokenResponse.access_token,
                 });
-                console.log("response:", response);
+                // console.log("response:", response);
                 message.success("Đăng ký thành công!");
                 navigate("/login");
             } catch (error) {
-                console.log("error:", error);
+                // console.log("error:", error);
                 // Xử lý các loại lỗi và hiển thị popup
                 // sai tài khoản hoặc mật khẩu
                 if (!error.response && error.message) {
@@ -75,11 +75,11 @@ const RegisterPage = () => {
             const response = await userService.facebookRegister({
                 token: res.accessToken,
             });
-            console.log("response:", response);
+            // console.log("response:", response);
             message.success("Đăng ký thành công!");
             navigate("/login");
         } catch (error) {
-            console.log("error:", error);
+            // console.log("error:", error);
             // Xử lý các loại lỗi và hiển thị popup
             // sai tài khoản hoặc mật khẩu
             if (!error.response && error.message) {
