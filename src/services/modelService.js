@@ -11,33 +11,13 @@ const modelService = {
     },
 
     // ===== ADMIN MODEL MANAGEMENT SERVICES =====
+
     // Lấy danh sách models với filter và pagination (Admin only)
     getModelsAdmin: (params = {}) => {
         const queryString = new URLSearchParams(params).toString();
-        const url = `model${queryString ? `?${queryString}` : ""}`;
-        console.log("url", url);
-
-        const token = localStorage.getItem("token");
-        // Hardcode HTTPS
-        const fullURL = `https://api.meowchat.id.vn/${url}`;
-        console.log("fullURL", fullURL);
-
-        return fetch(fullURL, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        }).then((response) => response.json());
+        const url = `/model/get-all-models${queryString ? `?${queryString}` : ""}`;
+        return axiosClient.get(url);
     },
-
-    // // Lấy danh sách models với filter và pagination (Admin only)
-    // getModelsAdmin: (params = {}) => {
-    //     const queryString = new URLSearchParams(params).toString();
-    //     const url = `/model${queryString ? `?${queryString}` : ""}`;
-    //     console.log("url", url);
-    //     return axiosClient.get("/model");
-    // },
 
     // Lấy chi tiết model (Admin only)
     getModelDetailAdmin: (modelId) => {

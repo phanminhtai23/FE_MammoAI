@@ -107,6 +107,7 @@ const PredictManagement = () => {
                 process.env.REACT_APP_BASE_BACKEND_URL
             );
             const response = await modelService.getModelsAdmin(params);
+            console.log("response", response);
             if (response.data) {
                 setModels(response.data);
                 setTotal(response.data.length); // Giả sử API trả về array
